@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -136,7 +137,7 @@ namespace CallForCode.Controllers
 
         #region FINDs        
         [HttpPost("findprodutor")]
-        public IActionResult FindProdutor([FromBody] dynamic filter)
+        public IActionResult FindProdutor([FromBody]dynamic filter)
         {
             var handler = new HttpClientHandler { Credentials = new NetworkCredential(DataAccess.IBMDataAccess.USER, DataAccess.IBMDataAccess.PASSWORD) };
             using (var client = DataAccess.IBMDataAccess.CreateHttpClient(handler, DataAccess.IBMDataAccess.USER, TABELA_PRODUTOR))
@@ -156,7 +157,7 @@ namespace CallForCode.Controllers
         }
 
         [HttpPost("findbeneficiador")]
-        public IActionResult FindBeneficiador([FromBody] dynamic filter)
+        public IActionResult FindBeneficiador([FromBody]dynamic filter)
         {
             var handler = new HttpClientHandler { Credentials = new NetworkCredential(DataAccess.IBMDataAccess.USER, DataAccess.IBMDataAccess.PASSWORD) };
             using (var client = DataAccess.IBMDataAccess.CreateHttpClient(handler, DataAccess.IBMDataAccess.USER, TABELA_BENEFICIADOR))
@@ -176,7 +177,7 @@ namespace CallForCode.Controllers
         }
 
         [HttpPost("findfornecedor")]
-        public IActionResult FindFornecedor([FromBody] dynamic filter)
+        public IActionResult FindFornecedor([FromBody]dynamic filter)
         {
             var handler = new HttpClientHandler { Credentials = new NetworkCredential(DataAccess.IBMDataAccess.USER, DataAccess.IBMDataAccess.PASSWORD) };
             using (var client = DataAccess.IBMDataAccess.CreateHttpClient(handler, DataAccess.IBMDataAccess.USER, TABELA_FORNECEDOR))
@@ -196,7 +197,7 @@ namespace CallForCode.Controllers
         }
 
         [HttpPost("finddistribuidor")]
-        public IActionResult FindDistribuidor([FromBody] dynamic filter)
+        public IActionResult FindDistribuidor([FromBody]dynamic filter)
         {
             var handler = new HttpClientHandler { Credentials = new NetworkCredential(DataAccess.IBMDataAccess.USER, DataAccess.IBMDataAccess.PASSWORD) };
             using (var client = DataAccess.IBMDataAccess.CreateHttpClient(handler, DataAccess.IBMDataAccess.USER, TABELA_DISTRIBUIDOR))
@@ -215,6 +216,81 @@ namespace CallForCode.Controllers
             }
         }
         #endregion
+
+        [HttpPost("find")]
+        public IActionResult Find([FromQuery]string business, string field, string value, int limit)
+        {
+            if (string.IsNullOrEmpty(business) || string.IsNullOrEmpty(field) || string.IsNullOrEmpty(value))
+                return BadRequest();
+
+            var filter = @"{'selector':{'" + field  + "':{'$eq': '" + value + "'}},'limit':" + limit.ToString() + ",'skip': 0}";
+
+            var json = JObject.Parse(filter);
+
+            IActionResult result;
+
+            switch (business)
+            {
+                case "produtor":
+                    result = this.FindProdutor(json);
+
+                    if (result is OkObjectResult)
+                    {
+                        var lst = (result as OkObjectResult).Value as Model.FindProdutor;
+
+                        if (lst.docs.Length > default(int))
+                            return Ok(lst.docs.FirstOrDefault());
+                        else
+                            return NotFound();
+                    }
+                    else
+                        return NotFound();                    
+                    break;
+                case "beneficiador":
+                    result = this.FindBeneficiador(json);
+
+                    if (result is OkObjectResult)
+                    {
+                        var lst = (result as OkObjectResult).Value as Model.FindBeneficiador;
+
+                        if (lst.docs.Length > default(int))
+                            return Ok(lst.docs.FirstOrDefault());
+                        else
+                            return NotFound();
+                    }
+                    break;
+                case "fornecedor":
+                    result = this.FindFornecedor(json);
+
+                    if (result is OkObjectResult)
+                    {
+                        var lst = (result as OkObjectResult).Value as Model.FindFornecedor;
+
+                        if (lst.docs.Length > default(int))
+                            return Ok(lst.docs.FirstOrDefault());
+                        else
+                            return NotFound();
+                    }
+                    break;
+                case "distribuidor":
+                    result = this.FindDistribuidor(json);
+
+                    if (result is OkObjectResult)
+                    {
+                        var lst = (result as OkObjectResult).Value as Model.FindDistribuidor;
+
+                        if (lst.docs.Length > default(int))
+                            return Ok(lst.docs.FirstOrDefault());
+                        else
+                            return NotFound();
+                    }
+                    break;
+                default:
+                    break;
+            }
+
+            return NotFound();
+        }
         #endregion
 
         #region PUTS
