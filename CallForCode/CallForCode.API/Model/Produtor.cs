@@ -17,4 +17,9 @@ namespace CallForCode.Model
         public string[] materiaprima { get; set; }
         public string status { get; set; }
     }
+
+    public class FindProdutor
+    {
+        public Produtor[] docs { get; set; }
+    }
 }

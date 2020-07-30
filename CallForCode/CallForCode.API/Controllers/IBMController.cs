@@ -28,32 +28,7 @@ namespace CallForCode.Controllers
         #endregion
 
         #region POSTS
-        [HttpPost("addteste")]
-        public IActionResult AddTeste([FromBody]Model.Teste instance)
-        {
-            if (instance == null || instance == Model.Teste.Empty)
-                return BadRequest();
-
-            var handler = new HttpClientHandler { Credentials = new NetworkCredential(DataAccess.IBMDataAccess.USER, DataAccess.IBMDataAccess.PASSWORD) };
-            using (var client = DataAccess.IBMDataAccess.CreateHttpClient(handler, DataAccess.IBMDataAccess.USER, TABELA_TESTE))
-            {
-                var creationResponse = DataAccess.IBMDataAccess.Create<Model.Teste>(client, instance);
-
-                if (creationResponse.StatusCode == HttpStatusCode.Created)
-                {
-                    var id = DataAccess.IBMDataAccess.GetString("id", creationResponse);
-
-                    var readResponse = DataAccess.IBMDataAccess.Read(client, id);
-
-                    var dd = DataAccess.IBMDataAccess.GetObjectModel<Model.Teste>(readResponse);
-
-                    return Created(client.BaseAddress, dd);
-                }                    
-                else
-                    return BadRequest();
-            }
-        }
-
+        #region ADDs        
         [HttpPost("addprodutor")]
         public IActionResult AddProdutor([FromBody] Model.Produtor instance)
         {
@@ -157,6 +132,89 @@ namespace CallForCode.Controllers
                     return BadRequest();
             }
         }
+        #endregion
+
+        #region FINDs        
+        [HttpPost("findprodutor")]
+        public IActionResult FindProdutor([FromBody] dynamic filter)
+        {
+            var handler = new HttpClientHandler { Credentials = new NetworkCredential(DataAccess.IBMDataAccess.USER, DataAccess.IBMDataAccess.PASSWORD) };
+            using (var client = DataAccess.IBMDataAccess.CreateHttpClient(handler, DataAccess.IBMDataAccess.USER, TABELA_PRODUTOR))
+            {
+                var findResponse = DataAccess.IBMDataAccess.Find(client, filter, TABELA_PRODUTOR);
+
+                if (findResponse.StatusCode == HttpStatusCode.OK)
+                {
+                    var result = DataAccess.IBMDataAccess.GetResultFind(findResponse);
+                    var lst = JsonConvert.DeserializeObject<Model.FindProdutor>(result);
+
+                    return Ok(lst);
+                }
+                else
+                    return NotFound();
+            }
+        }
+
+        [HttpPost("findbeneficiador")]
+        public IActionResult FindBeneficiador([FromBody] dynamic filter)
+        {
+            var handler = new HttpClientHandler { Credentials = new NetworkCredential(DataAccess.IBMDataAccess.USER, DataAccess.IBMDataAccess.PASSWORD) };
+            using (var client = DataAccess.IBMDataAccess.CreateHttpClient(handler, DataAccess.IBMDataAccess.USER, TABELA_BENEFICIADOR))
+            {
+                var findResponse = DataAccess.IBMDataAccess.Find(client, filter, TABELA_BENEFICIADOR);
+
+                if (findResponse.StatusCode == HttpStatusCode.OK)
+                {
+                    var result = DataAccess.IBMDataAccess.GetResultFind(findResponse);
+                    var lst = JsonConvert.DeserializeObject<Model.FindBeneficiador>(result);
+
+                    return Ok(lst);
+                }
+                else
+                    return NotFound();
+            }
+        }
+
+        [HttpPost("findfornecedor")]
+        public IActionResult FindFornecedor([FromBody] dynamic filter)
+        {
+            var handler = new HttpClientHandler { Credentials = new NetworkCredential(DataAccess.IBMDataAccess.USER, DataAccess.IBMDataAccess.PASSWORD) };
+            using (var client = DataAccess.IBMDataAccess.CreateHttpClient(handler, DataAccess.IBMDataAccess.USER, TABELA_FORNECEDOR))
+            {
+                var findResponse = DataAccess.IBMDataAccess.Find(client, filter, TABELA_FORNECEDOR);
+
+                if (findResponse.StatusCode == HttpStatusCode.OK)
+                {
+                    var result = DataAccess.IBMDataAccess.GetResultFind(findResponse);
+                    var lst = JsonConvert.DeserializeObject<Model.FindFornecedor>(result);
+
+                    return Ok(lst);
+                }
+                else
+                    return NotFound();
+            }
+        }
+
+        [HttpPost("finddistribuidor")]
+        public IActionResult FindDistribuidor([FromBody] dynamic filter)
+        {
+            var handler = new HttpClientHandler { Credentials = new NetworkCredential(DataAccess.IBMDataAccess.USER, DataAccess.IBMDataAccess.PASSWORD) };
+            using (var client = DataAccess.IBMDataAccess.CreateHttpClient(handler, DataAccess.IBMDataAccess.USER, TABELA_DISTRIBUIDOR))
+            {
+                var findResponse = DataAccess.IBMDataAccess.Find(client, filter, TABELA_DISTRIBUIDOR);
+
+                if (findResponse.StatusCode == HttpStatusCode.OK)
+                {
+                    var result = DataAccess.IBMDataAccess.GetResultFind(findResponse);
+                    var lst = JsonConvert.DeserializeObject<Model.FindDistribuidor>(result);
+
+                    return Ok(lst);
+                }
+                else
+                    return NotFound();
+            }
+        }
+        #endregion
         #endregion
 
         #region PUTS

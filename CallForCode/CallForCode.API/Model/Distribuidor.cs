@@ -17,4 +17,9 @@ namespace CallForCode.Model
         public string[] produto { get; set; }
         public string status { get; set; }
     }
+
+    public class FindDistribuidor
+    {
+        public Distribuidor[] docs { get; set; }
+    }
 }

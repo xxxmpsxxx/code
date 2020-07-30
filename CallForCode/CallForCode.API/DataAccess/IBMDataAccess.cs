@@ -28,6 +28,11 @@ namespace CallForCode.DataAccess
             return client.PostAsync("", new StringContent(json, Encoding.UTF8, "application/json")).Result;
         }
 
+        public static HttpResponseMessage Find(HttpClient client, object filter, string database)
+        {
+            return client.PostAsync($"/{database}/_find", new StringContent(filter.ToString(), Encoding.UTF8, "application/json")).Result;
+        }
+
         public static HttpResponseMessage Read(HttpClient client, string id)
         {
             return client.GetAsync(id).Result;
@@ -70,6 +75,15 @@ namespace CallForCode.DataAccess
             {
                 var responseContent = (JObject)JToken.ReadFrom(new JsonTextReader(streamReader));
                 return responseContent[propertyName].Value<string>();
+            }
+        }
+
+        public static string GetResultFind(HttpResponseMessage responseMessage)
+        {
+            using (var streamReader = new StreamReader(responseMessage.Content.ReadAsStreamAsync().Result))
+            {
+                var responseContent = (JObject)JToken.ReadFrom(new JsonTextReader(streamReader));
+                return responseContent.ToString();
             }
         }
 

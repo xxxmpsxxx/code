@@ -17,4 +17,9 @@ namespace CallForCode.Model
         public string[] recursos { get; set; }
         public string status { get; set; }
     }
+
+    public class FindFornecedor
+    {
+        public Fornecedor[] docs { get; set; }
+    }
 }
