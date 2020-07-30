@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.WebEncoders.Testing;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,8 @@ namespace CallForCode.Model
     {
         public static Teste Empty;
                 
+        public string _id { get; set; }                
+        public string _rev { get; set; }
         public string Nome { get; set; }
         public string Cpf { get; set; }
         public string Telefone { get; set; }
