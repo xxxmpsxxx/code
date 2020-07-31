@@ -25,6 +25,101 @@ namespace CallForCode.Controllers
         const string TABELA_DISTRIBUIDOR = "distribuidor";
 
         #region GETS
+        [HttpGet("getfindall")]
+        public IActionResult GetFindAll([FromQuery] string business, int limit)
+        {
+            if (string.IsNullOrEmpty(business))
+                return BadRequest();
+
+            var filter = @"{'selector':{'_id':{'$gt': ''}},'limit':" + limit.ToString() + ",'skip': 0}";
+
+            var json = JObject.Parse(filter);
+
+            IActionResult result;
+
+            switch (business)
+            {
+                case "produtor":
+                    result = this.FindProdutor(json);
+
+                    if (result is OkObjectResult)
+                    {
+                        var lst = (result as OkObjectResult).Value as Model.FindProdutor;
+
+                        if (lst.docs.Length > default(int))
+                        {
+                            if (limit == 1)
+                                return Ok(lst.docs.FirstOrDefault());
+                            else
+                                return Ok(lst.docs.Take(limit));
+                        }
+                        else
+                            return NotFound();
+                    }
+                    else
+                        return NotFound();
+                    break;
+                case "beneficiador":
+                    result = this.FindBeneficiador(json);
+
+                    if (result is OkObjectResult)
+                    {
+                        var lst = (result as OkObjectResult).Value as Model.FindBeneficiador;
+
+                        if (lst.docs.Length > default(int))
+                        {
+                            if (limit == 1)
+                                return Ok(lst.docs.FirstOrDefault());
+                            else
+                                return Ok(lst.docs.Take(limit));
+                        }
+                        else
+                            return NotFound();
+                    }
+                    break;
+                case "fornecedor":
+                    result = this.FindFornecedor(json);
+
+                    if (result is OkObjectResult)
+                    {
+                        var lst = (result as OkObjectResult).Value as Model.FindFornecedor;
+
+                        if (lst.docs.Length > default(int))
+                        {
+                            if (limit == 1)
+                                return Ok(lst.docs.FirstOrDefault());
+                            else
+                                return Ok(lst.docs.Take(limit));
+                        }
+                        else
+                            return NotFound();
+                    }
+                    break;
+                case "distribuidor":
+                    result = this.FindDistribuidor(json);
+
+                    if (result is OkObjectResult)
+                    {
+                        var lst = (result as OkObjectResult).Value as Model.FindDistribuidor;
+
+                        if (lst.docs.Length > default(int))
+                        {
+                            if (limit == 1)
+                                return Ok(lst.docs.FirstOrDefault());
+                            else
+                                return Ok(lst.docs.Take(limit));
+                        }
+                        else
+                            return NotFound();
+                    }
+                    break;
+                default:
+                    break;
+            }
+
+            return NotFound();
+        }
+
         [HttpGet("getfind")]
         public IActionResult GetFind([FromQuery] string business, string field, string value, int limit)
         {
