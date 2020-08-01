@@ -31,10 +31,17 @@ Specialties:
 
 ## Contents
   
-  ### code for front
+  ### code for front HomeGipe
         
-        HomeChat - Site do projeto com chatbot
+        HomeGipe - Site do projeto com chatbot
 
-  ### code for back
+  ### code for  CallForCode 
  
 	CallForCode - Projeto .Net da API - Cloud HomeChat
+	
+   ### code for CallForCode.App
+ 
+	CallForCode - Projeto App - desenvolvido em Xamarin (.Net Core)
+	
+	
+

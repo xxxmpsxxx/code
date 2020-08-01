@@ -17,6 +17,8 @@ namespace CallForCode.Model
         public string[] materiaprima { get; set; }
         public string[] produto { get; set; }
         public string status { get; set; }
+        public string imagem { get; set; }
+        public string url { get; set; }
     }
 
     public class FindBeneficiador

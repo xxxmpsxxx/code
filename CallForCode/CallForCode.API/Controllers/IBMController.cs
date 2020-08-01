@@ -25,7 +25,195 @@ namespace CallForCode.Controllers
         const string TABELA_DISTRIBUIDOR = "distribuidor";
 
         #region GETS
+        [HttpGet("getfindall")]
+        public IActionResult GetFindAll([FromQuery] string business, int limit)
+        {
+            if (string.IsNullOrEmpty(business))
+                return BadRequest();
 
+            var filter = @"{'selector':{'_id':{'$gt': ''}},'limit':" + limit.ToString() + ",'skip': 0}";
+
+            var json = JObject.Parse(filter);
+
+            IActionResult result;
+
+            switch (business)
+            {
+                case "produtor":
+                    result = this.FindProdutor(json);
+
+                    if (result is OkObjectResult)
+                    {
+                        var lst = (result as OkObjectResult).Value as Model.FindProdutor;
+
+                        if (lst.docs.Length > default(int))
+                        {
+                            if (limit == 1)
+                                return Ok(lst.docs.FirstOrDefault());
+                            else
+                                return Ok(lst.docs.Take(limit));
+                        }
+                        else
+                            return NotFound();
+                    }
+                    else
+                        return NotFound();
+                    break;
+                case "beneficiador":
+                    result = this.FindBeneficiador(json);
+
+                    if (result is OkObjectResult)
+                    {
+                        var lst = (result as OkObjectResult).Value as Model.FindBeneficiador;
+
+                        if (lst.docs.Length > default(int))
+                        {
+                            if (limit == 1)
+                                return Ok(lst.docs.FirstOrDefault());
+                            else
+                                return Ok(lst.docs.Take(limit));
+                        }
+                        else
+                            return NotFound();
+                    }
+                    break;
+                case "fornecedor":
+                    result = this.FindFornecedor(json);
+
+                    if (result is OkObjectResult)
+                    {
+                        var lst = (result as OkObjectResult).Value as Model.FindFornecedor;
+
+                        if (lst.docs.Length > default(int))
+                        {
+                            if (limit == 1)
+                                return Ok(lst.docs.FirstOrDefault());
+                            else
+                                return Ok(lst.docs.Take(limit));
+                        }
+                        else
+                            return NotFound();
+                    }
+                    break;
+                case "distribuidor":
+                    result = this.FindDistribuidor(json);
+
+                    if (result is OkObjectResult)
+                    {
+                        var lst = (result as OkObjectResult).Value as Model.FindDistribuidor;
+
+                        if (lst.docs.Length > default(int))
+                        {
+                            if (limit == 1)
+                                return Ok(lst.docs.FirstOrDefault());
+                            else
+                                return Ok(lst.docs.Take(limit));
+                        }
+                        else
+                            return NotFound();
+                    }
+                    break;
+                default:
+                    break;
+            }
+
+            return NotFound();
+        }
+
+        [HttpGet("getfind")]
+        public IActionResult GetFind([FromQuery] string business, string field, string value, int limit)
+        {
+            if (string.IsNullOrEmpty(business) || string.IsNullOrEmpty(field) || string.IsNullOrEmpty(value))
+                return BadRequest();
+
+            var filter = @"{'selector':{'" + field + "':{'$eq': '" + value + "'}},'limit':" + limit.ToString() + ",'skip': 0}";
+
+            var json = JObject.Parse(filter);
+
+            IActionResult result;
+
+            switch (business)
+            {
+                case "produtor":
+                    result = this.FindProdutor(json);
+
+                    if (result is OkObjectResult)
+                    {
+                        var lst = (result as OkObjectResult).Value as Model.FindProdutor;
+
+                        if (lst.docs.Length > default(int))
+                        {
+                            if (limit == 1)
+                                return Ok(lst.docs.FirstOrDefault());
+                            else
+                                return Ok(lst.docs.Take(limit));
+                        }
+                        else
+                            return NotFound();
+                    }
+                    else
+                        return NotFound();
+                    break;
+                case "beneficiador":
+                    result = this.FindBeneficiador(json);
+
+                    if (result is OkObjectResult)
+                    {
+                        var lst = (result as OkObjectResult).Value as Model.FindBeneficiador;
+
+                        if (lst.docs.Length > default(int))
+                        {
+                            if (limit == 1)
+                                return Ok(lst.docs.FirstOrDefault());
+                            else
+                                return Ok(lst.docs.Take(limit));
+                        }
+                        else
+                            return NotFound();
+                    }
+                    break;
+                case "fornecedor":
+                    result = this.FindFornecedor(json);
+
+                    if (result is OkObjectResult)
+                    {
+                        var lst = (result as OkObjectResult).Value as Model.FindFornecedor;
+
+                        if (lst.docs.Length > default(int))
+                        {
+                            if (limit == 1)
+                                return Ok(lst.docs.FirstOrDefault());
+                            else
+                                return Ok(lst.docs.Take(limit));
+                        }
+                        else
+                            return NotFound();
+                    }
+                    break;
+                case "distribuidor":
+                    result = this.FindDistribuidor(json);
+
+                    if (result is OkObjectResult)
+                    {
+                        var lst = (result as OkObjectResult).Value as Model.FindDistribuidor;
+
+                        if (lst.docs.Length > default(int))
+                        {
+                            if (limit == 1)
+                                return Ok(lst.docs.FirstOrDefault());
+                            else
+                                return Ok(lst.docs.Take(limit));
+                        }
+                        else
+                            return NotFound();
+                    }
+                    break;
+                default:
+                    break;
+            }
+
+            return NotFound();
+        }
         #endregion
 
         #region POSTS
@@ -217,19 +405,19 @@ namespace CallForCode.Controllers
         }
         #endregion
 
-        [HttpPost("find")]
-        public IActionResult Find([FromQuery]string business, string field, string value, int limit)
+        [HttpPost("postfind")]
+        public IActionResult PostFind([FromBody]Model.JsonFind filter)
         {
-            if (string.IsNullOrEmpty(business) || string.IsNullOrEmpty(field) || string.IsNullOrEmpty(value))
+            if (filter == null)
                 return BadRequest();
 
-            var filter = @"{'selector':{'" + field  + "':{'$eq': '" + value + "'}},'limit':" + limit.ToString() + ",'skip': 0}";
+            var filterParse = @"{'selector':{'" + filter.field + "':{'$eq': '" + filter.value + "'}},'limit':" + filter.limit + ",'skip': 0}";
 
-            var json = JObject.Parse(filter);
+            var json = JObject.Parse(filterParse);
 
             IActionResult result;
 
-            switch (business)
+            switch (filter.business)
             {
                 case "produtor":
                     result = this.FindProdutor(json);
@@ -239,7 +427,12 @@ namespace CallForCode.Controllers
                         var lst = (result as OkObjectResult).Value as Model.FindProdutor;
 
                         if (lst.docs.Length > default(int))
-                            return Ok(lst.docs.FirstOrDefault());
+                        {
+                            if (int.Parse(filter.limit) == 1)
+                                return Ok(lst.docs.FirstOrDefault());
+                            else
+                                return Ok(lst.docs.Take(int.Parse(filter.limit)));                            
+                        }                            
                         else
                             return NotFound();
                     }
@@ -254,7 +447,12 @@ namespace CallForCode.Controllers
                         var lst = (result as OkObjectResult).Value as Model.FindBeneficiador;
 
                         if (lst.docs.Length > default(int))
-                            return Ok(lst.docs.FirstOrDefault());
+                        {
+                            if (int.Parse(filter.limit) == 1)
+                                return Ok(lst.docs.FirstOrDefault());
+                            else
+                                return Ok(lst.docs.Take(int.Parse(filter.limit)));
+                        }                            
                         else
                             return NotFound();
                     }
@@ -267,7 +465,12 @@ namespace CallForCode.Controllers
                         var lst = (result as OkObjectResult).Value as Model.FindFornecedor;
 
                         if (lst.docs.Length > default(int))
-                            return Ok(lst.docs.FirstOrDefault());
+                        {
+                            if (int.Parse(filter.limit) == 1)
+                                return Ok(lst.docs.FirstOrDefault());
+                            else
+                                return Ok(lst.docs.Take(int.Parse(filter.limit)));
+                        }                            
                         else
                             return NotFound();
                     }
@@ -280,7 +483,12 @@ namespace CallForCode.Controllers
                         var lst = (result as OkObjectResult).Value as Model.FindDistribuidor;
 
                         if (lst.docs.Length > default(int))
-                            return Ok(lst.docs.FirstOrDefault());
+                        {
+                            if (int.Parse(filter.limit) == 1)
+                                return Ok(lst.docs.FirstOrDefault());
+                            else
+                                return Ok(lst.docs.Take(int.Parse(filter.limit)));
+                        }
                         else
                             return NotFound();
                     }

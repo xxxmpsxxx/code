@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:validation="clr-namespace:CallForCode.App.Validations"
+             mc:Ignorable="d"
+             x:Class="CallForCode.App.Views.DistribuidorPage"
+             Title="Distribuidor">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="FloatButton" TargetType="Button">
+                <Setter Property="CornerRadius" Value="100"/>
+                <Setter Property="BackgroundColor" Value="WhiteSmoke"/>
+                <Setter Property="HeightRequest" Value="55"/>
+                <Setter Property="WidthRequest" Value="55"/>
+                <Setter Property="HorizontalOptions" Value="CenterAndExpand"/>
+                <Setter Property="VerticalOptions" Value="CenterAndExpand"/>
+                <Setter Property="Padding" Value="15"/>
+                <Setter Property="Margin" Value="0,0,0,15"/>
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <AbsoluteLayout VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+            <StackLayout AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All">
+                <Grid AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All">
+                    <StackLayout IsVisible="{Binding DataExists}" Padding="10">
+                        <ListView x:Name="ListViewDistribuidor" ItemsSource="{Binding ListDistribuidor}" RowHeight="160" SelectedItem="{Binding SelectedDistribuidor, Mode=TwoWay}">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <ViewCell>
+                                        <ContentView Padding="0,5">
+                                            <Frame Padding="10">
+                                                <Grid Padding="0">
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="auto"></RowDefinition>
+                                                        <RowDefinition Height="auto"></RowDefinition>
+                                                        <RowDefinition Height="auto"></RowDefinition>
+                                                        <RowDefinition Height="auto"></RowDefinition>
+                                                    </Grid.RowDefinitions>
+
+                                                    <StackLayout Grid.Row="0" Margin="0,3">
+                                                        <Label Margin="5,0" Text="Nome" FontSize="Micro" TextColor="#34AFF2"></Label>
+                                                        <Label Margin="5,-9" Text="{Binding nome}"></Label>
+                                                    </StackLayout>
+                                                    <StackLayout Grid.Row="1" Margin="0,3">
+                                                        <Label Margin="5,0" Text="Contato" FontSize="Micro" TextColor="#34AFF2"></Label>
+                                                        <Label Margin="5,-9" Text="{Binding contato}"></Label>
+                                                    </StackLayout>
+                                                    <StackLayout Grid.Row="2" Margin="0,3">
+                                                        <Label Margin="5,0" Text="Tipo de Transporte" FontSize="Micro" TextColor="#34AFF2"></Label>
+                                                        <Label Margin="5,-9" Text="{Binding tipotransporte}"></Label>
+                                                    </StackLayout>
+                                                    <StackLayout Grid.Row="3" Margin="0,3">
+                                                        <Label Margin="5,0" Text="Status" FontSize="Micro" TextColor="#34AFF2"></Label>
+                                                        <Label Margin="5,-9" Text="{Binding status}"></Label>
+                                                    </StackLayout>
+                                                </Grid>
+                                            </Frame>
+                                        </ContentView>
+                                    </ViewCell>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </StackLayout>
+                    <StackLayout IsVisible="{Binding DataExists, Converter={validation:InverseBoolConverter}}" Padding="10" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+                        <Label Text="Nenhum distribuidor encontrado"></Label>
+                    </StackLayout>
+                    <Button ImageSource="add" VerticalOptions="End" HorizontalOptions="End" Margin="10" AbsoluteLayout.LayoutFlags="PositionProportional" AbsoluteLayout.LayoutBounds="1,1,AutoSize,AutoSize" Style="{StaticResource FloatButton}"></Button>
+                </Grid>
+            </StackLayout>
+            <StackLayout IsVisible="{Binding IsBusy}" AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All" BackgroundColor="White" Opacity="0.5">
+                <ActivityIndicator IsVisible="{Binding IsBusy}" IsRunning="{Binding IsBusy}" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" Color="#34AFF2"></ActivityIndicator>
+            </StackLayout>
+        </AbsoluteLayout>
+    </ContentPage.Content>
+</ContentPage>

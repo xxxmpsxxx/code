@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             BackgroundColor="White"
+             x:Class="CallForCode.App.Views.LoginPage">
+    <ContentPage.Content>
+        <StackLayout>
+            <Image Source="GIPE"></Image>
+            <Label Text="Efetuar Login" TextColor="#34AFF2" HorizontalOptions="CenterAndExpand" />
+            <StackLayout HorizontalOptions="Center" VerticalOptions="Center">
+                <Button ImageSource="fFacebook" Text="Sign-in" WidthRequest="200" HeightRequest="60" BackgroundColor="WhiteSmoke"  Command="{Binding FacebookSigninCommand}"></Button>
+                <Button ImageSource="gGoogle" Text="Sign-in" WidthRequest="200" HeightRequest="60" BackgroundColor="WhiteSmoke" Command="{Binding GoogleSigninCommand}"></Button>
+                <Button ImageSource="BtnGIPE" Text="Sign-in" WidthRequest="200" HeightRequest="60" BackgroundColor="WhiteSmoke" Command="{Binding GIPESigninCommand}"></Button>
+                <Label Padding="3" Text="Não sou cadastrado" HorizontalOptions="Center" TextColor="#34AFF2" FontSize="Micro" FontAttributes="Bold"></Label>
+            </StackLayout>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

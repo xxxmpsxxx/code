@@ -16,6 +16,8 @@ namespace CallForCode.Model
         public string tipoproduto { get; set; }
         public string[] materiaprima { get; set; }
         public string status { get; set; }
+        public string imagem { get; set; }
+        public string url { get; set; }
     }
 
     public class FindProdutor
