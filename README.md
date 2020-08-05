@@ -33,15 +33,15 @@ Specialties:
   
   ### code for front HomeGipe
         
-        HomeGipe - Site do projeto com chatbot
+        HomeGipe - Site do projeto com chatbot (Leo)
 
   ### code for  CallForCode 
  
-	CallForCode - Projeto .Net da API - Cloud HomeChat
+	CallForCode - Projeto .Net da API - Cloud HomeChat (Marcus Paulo)
 	
    ### code for CallForCode.App
  
-	CallForCode - Projeto App - desenvolvido em Xamarin (.Net Core)
+	CallForCode - Projeto App - desenvolvido em Xamarin (.Net Core) (Marcus Paulo)
 	
 	
 
